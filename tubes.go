@@ -7,10 +7,6 @@ import (
 	"strconv"
 )
 
-// ============================================================
-// TIPE DATA BENTUKAN
-// ============================================================
-
 // Kandidat menyimpan informasi lengkap satu kandidat dalam pemilihan
 type Kandidat struct {
 	NomorUrut int
@@ -20,20 +16,12 @@ type Kandidat struct {
 	PoinSuara int
 }
 
-// ============================================================
-// VARIABEL GLOBAL
-// Hanya array utama yang boleh menjadi variabel global.
 // Jumlah data aktif (n) dan variabel lain dikelola sebagai
 // parameter subprogram atau variabel lokal di main.
-// ============================================================
 var dataKandidat [100]Kandidat
 
 // scanner adalah fasilitas baca stdin (infrastruktur I/O, bukan data bisnis)
 var scanner = bufio.NewScanner(os.Stdin)
-
-// ============================================================
-// SUBPROGRAM UTILITAS I/O
-// ============================================================
 
 // readInput membaca satu baris teks dari stdin
 // Output : string – teks yang dimasukkan pengguna
@@ -44,7 +32,6 @@ func readInput() string {
 
 // readInt membaca bilangan bulat dari stdin.
 // Jika input bukan angka, pengguna diminta mengulang (pola repeat-until).
-// Output : int – nilai integer yang valid dari pengguna
 func readInt() int {
 	for {
 		str := readInput()
@@ -56,18 +43,7 @@ func readInt() int {
 	}
 }
 
-// ============================================================
-// SUBPROGRAM PENCARIAN
-// ============================================================
-
-// sequentialSearch mencari kandidat berdasarkan nomor urut secara berurutan
-// dari elemen pertama hingga ditemukan atau habis.
-// Input  : data [100]Kandidat – salinan array data kandidat
-//
-//	n    int           – jumlah data aktif
-//	no   int           – nomor urut yang dicari
-//
-// Output : int  – indeks kandidat jika ditemukan, -1 jika tidak ditemukan
+// sequentialSearch mencari kandidat berdasarkan nomor urut secara berurutan dari elemen pertama hingga ditemukan atau habis.
 func sequentialSearch(data [100]Kandidat, n int, no int) int {
 	idx := -1
 	i := 0
@@ -82,12 +58,6 @@ func sequentialSearch(data [100]Kandidat, n int, no int) int {
 
 // binarySearch mencari kandidat berdasarkan nomor urut dengan metode biner.
 // Prasyarat : data HARUS sudah terurut ascending berdasarkan NomorUrut.
-// Input  : data [100]Kandidat – salinan array yang sudah terurut
-//
-//	n    int           – jumlah data aktif
-//	no   int           – nomor urut yang dicari
-//
-// Output : int  – indeks kandidat jika ditemukan, -1 jika tidak ditemukan
 func binarySearch(data [100]Kandidat, n int, no int) int {
 	low := 0
 	high := n - 1
@@ -105,15 +75,8 @@ func binarySearch(data [100]Kandidat, n int, no int) int {
 	return idx
 }
 
-// ============================================================
-// SUBPROGRAM PENGURUTAN
-// ============================================================
-
 // selectionSort mengurutkan kandidat berdasarkan PoinSuara terbanyak (descending).
 // Algoritma: setiap iterasi pilih elemen terbesar dari sisa, tukar ke posisi i.
-// Input/Output : data *[100]Kandidat – array dimodifikasi langsung via pointer
-//
-//	n    int            – jumlah data aktif
 func selectionSort(data *[100]Kandidat, n int, isAscending bool) {
 	for i := 0; i < n-1; i++ {
 		maxIdx := i
@@ -136,9 +99,6 @@ func selectionSort(data *[100]Kandidat, n int, isAscending bool) {
 
 // insertionSort mengurutkan kandidat berdasarkan NomorUrut secara ascending.
 // Algoritma: setiap elemen disisipkan ke posisi yang tepat pada bagian terurut.
-// Input/Output : data *[100]Kandidat – array dimodifikasi langsung via pointer
-//
-//	n    int            – jumlah data aktif
 func insertionSort(data *[100]Kandidat, n int, isAscending bool) {
 	for i := 1; i < n; i++ {
 		key := data[i]
@@ -161,7 +121,6 @@ func insertionSort(data *[100]Kandidat, n int, isAscending bool) {
 				data[j+1] = data[j]
 				j--
 			} else {
-				// Jika sudah tidak perlu digeser, hentikan perulangan internal
 				break
 			}
 		}
@@ -171,12 +130,7 @@ func insertionSort(data *[100]Kandidat, n int, isAscending bool) {
 	fmt.Printf("Data berhasil diurutkan")
 }
 
-// ============================================================
-// SUBPROGRAM TAMPILAN
-// ============================================================
-
 // tampilProfil menampilkan informasi lengkap satu kandidat ke layar.
-// Input : k Kandidat – data kandidat yang akan ditampilkan
 func tampilProfil(k Kandidat) {
 	fmt.Println("  --------------------------------")
 	fmt.Println("  Nomor Urut :", k.NomorUrut)
@@ -187,12 +141,6 @@ func tampilProfil(k Kandidat) {
 	fmt.Println("  --------------------------------")
 }
 
-// hitungTotalSuara menjumlahkan seluruh poin suara dari semua kandidat aktif.
-// Input  : data [100]Kandidat – salinan array data kandidat
-//
-//	n    int           – jumlah data aktif
-//
-// Output : int  – total suara seluruh kandidat
 func hitungTotalSuara(data [100]Kandidat, n int) int {
 	total := 0
 	for i := 0; i < n; i++ {
@@ -200,11 +148,6 @@ func hitungTotalSuara(data [100]Kandidat, n int) int {
 	}
 	return total
 }
-
-// tampilkanSemuaKandidat mencetak profil semua kandidat yang terdaftar.
-// Input : data [100]Kandidat – salinan array data kandidat
-//
-//	n    int           – jumlah data aktif
 func tampilkanSemuaKandidat(data [100]Kandidat, n int) {
 	if n == 0 {
 		fmt.Println("Belum ada data kandidat.")
@@ -216,11 +159,6 @@ func tampilkanSemuaKandidat(data [100]Kandidat, n int) {
 	}
 }
 
-// tampilkanStatistik menampilkan statistik persentase suara tiap kandidat
-// beserta total suara yang telah masuk.
-// Input : data [100]Kandidat – salinan array data kandidat
-//
-//	n    int           – jumlah data aktif
 func tampilkanStatistik(data [100]Kandidat, n int) {
 	if n == 0 {
 		fmt.Println("Belum ada data kandidat.")
@@ -240,13 +178,7 @@ func tampilkanStatistik(data [100]Kandidat, n int) {
 	}
 }
 
-// ============================================================
-// SUBPROGRAM PEMBANTU PEMILIHAN METODE
-// ============================================================
-
 // pilihMetodeCari menampilkan sub-menu metode pencarian dan membaca pilihan pengguna.
-// Pengguna diminta mengulang jika pilihan di luar 1-2 (pola repeat-until).
-// Output : int – 1 untuk Sequential Search, 2 untuk Binary Search
 func pilihMetodeCari() int {
 	fmt.Println("  Pilih metode pencarian:")
 	fmt.Println("  1. Sequential Search")
@@ -282,15 +214,7 @@ func pilihAscending() int {
 }
 
 // cariDenganMetode mencari kandidat menggunakan metode yang dipilih pengguna.
-// Jika Binary Search dipilih, data diurutkan dahulu dengan Insertion Sort
-// agar prasyarat binary search terpenuhi.
-// Input  : data   *[100]Kandidat – array via pointer (bisa diurutkan di tempat)
-//
-//	n      int            – jumlah data aktif
-//	no     int            – nomor urut yang dicari
-//	metode int            – 1=Sequential Search, 2=Binary Search
-//
-// Output : int – indeks kandidat jika ditemukan, -1 jika tidak ditemukan
+// Jika Binary Search dipilih, data diurutkan dahulu dengan Insertion Sort agar prasyarat binary search terpenuhi.
 func cariDenganMetode(data *[100]Kandidat, n int, no int, metode int) int {
 	if metode == 2 {
 		fmt.Println("  [Binary Search] Mengurutkan data terlebih dahulu...")
@@ -300,15 +224,8 @@ func cariDenganMetode(data *[100]Kandidat, n int, no int, metode int) int {
 	return sequentialSearch(*data, n, no)
 }
 
-// ============================================================
-// SUBPROGRAM OPERASI CRUD
-// ============================================================
-
 // tambahKandidat menambahkan satu kandidat baru ke akhir array.
 // Menolak jika array sudah penuh (n >= 100).
-// Input/Output : data *[100]Kandidat – array dimodifikasi via pointer
-//
-//	n    *int           – jumlah data aktif, bertambah 1 jika berhasil
 func tambahKandidat(data *[100]Kandidat, n *int) {
 	if *n >= 100 {
 		fmt.Println("Data kandidat sudah penuh (maksimal 100 kandidat).")
@@ -340,12 +257,6 @@ func tambahKandidat(data *[100]Kandidat, n *int) {
 	fmt.Println("Data berhasil ditambahkan.")
 }
 
-// ubahKandidat mengubah nama dan visi-misi kandidat yang ditemukan.
-// Pengguna memilih metode pencarian (Sequential atau Binary Search).
-// Jika Binary Search dipilih, urutan array dapat berubah (data diurutkan dahulu).
-// Input/Output : data *[100]Kandidat – array dimodifikasi via pointer
-//
-//	n    int            – jumlah data aktif (tidak berubah)
 func ubahKandidat(data *[100]Kandidat, n int) {
 	if n == 0 {
 		fmt.Println("Belum ada data kandidat.")
@@ -369,13 +280,6 @@ func ubahKandidat(data *[100]Kandidat, n int) {
 	}
 }
 
-// hapusKandidat menghapus satu kandidat dari array berdasarkan nomor urut.
-// Elemen dihapus dengan menggeser semua elemen sesudahnya satu posisi ke kiri,
-// kemudian slot terakhir dikosongkan dan n dikurangi 1.
-// Pengguna memilih metode pencarian (Sequential atau Binary Search).
-// Input/Output : data *[100]Kandidat – array dimodifikasi via pointer
-//
-//	n    *int           – jumlah data aktif, berkurang 1 jika berhasil
 func hapusKandidat(data *[100]Kandidat, n *int) {
 	if *n == 0 {
 		fmt.Println("Belum ada data kandidat.")
@@ -391,7 +295,7 @@ func hapusKandidat(data *[100]Kandidat, n *int) {
 		for i := idx; i < *n-1; i++ {
 			data[i] = data[i+1]
 		}
-		data[*n-1] = Kandidat{} // kosongkan slot terakhir
+		data[*n-1] = Kandidat{}
 		*n--
 		fmt.Println("Data berhasil dihapus.")
 	} else {
@@ -399,11 +303,6 @@ func hapusKandidat(data *[100]Kandidat, n *int) {
 	}
 }
 
-// tambahSuara menambahkan satu poin suara ke kandidat yang dipilih pemilih.
-// Pencarian menggunakan Sequential Search (tidak mengubah urutan array).
-// Input/Output : data *[100]Kandidat – array dimodifikasi via pointer
-//
-//	n    int            – jumlah data aktif
 func tambahSuara(data *[100]Kandidat, n int) {
 	if n == 0 {
 		fmt.Println("Belum ada data kandidat.")
@@ -421,15 +320,7 @@ func tambahSuara(data *[100]Kandidat, n int) {
 	}
 }
 
-// ============================================================
-// SUBPROGRAM MENU PENCARIAN & PENGURUTAN
-// ============================================================
-
-// menuSearch menjalankan pencarian kandidat
-// dan menampilkan hasilnya.
-// Input : data [100]Kandidat – salinan array (tidak mengubah urutan asli)
-//
-//	n    int           – jumlah data aktif
+// menuSearch menjalankan pencarian kandidat dan menampilkan hasilnya.
 func menuSearch(data [100]Kandidat, n int) {
 	if n == 0 {
 		fmt.Println("Belum ada data kandidat.")
@@ -454,26 +345,21 @@ func menuSort(data *[100]Kandidat, n int) {
 		return
 	}
 
-	// 1. Dapatkan pilihan berdasarkan Suara atau Nomor
 	berdasarkan := pilihSuaraNomor()
 
-	// 2. Dapatkan pilihan arah urutan (Ascend/Descend)
 	pilihanArah := pilihAscending()
 	isAscending := true
 	if pilihanArah == 2 {
 		isAscending = false
 	}
 
-	// 3. Eksekusi algoritma yang tepat
 	if berdasarkan == 1 {
-		// Berdasarkan Suara -> Menggunakan Selection Sort milik Anda
 		selectionSort(data, n, isAscending)
 	} else if berdasarkan == 2 {
-		// Berdasarkan Nomor -> Menggunakan Insertion Sort milik Anda
 		insertionSort(data, n, isAscending)
 	}
 
-	fmt.Println("!") // Melengkapi teks "Data berhasil diurutkan" dari dalam fungsi sort
+	fmt.Println("!")
 }
 
 func pilihSuaraNomor() int {
@@ -494,12 +380,6 @@ func pilihSuaraNomor() int {
 	return pilihan
 }
 
-// ============================================================
-// SUBPROGRAM MENU UTAMA
-// ============================================================
-
-// tampilMenu menampilkan pilihan menu utama dan membaca pilihan pengguna.
-// Output : int – nomor menu yang dipilih pengguna
 func tampilMenu() int {
 	fmt.Println("\n╔══════════════════════════════════════════════════╗")
 	fmt.Println("║   Sistem Pemungutan Suara Digital (E-Voting)     ║")
@@ -518,18 +398,12 @@ func tampilMenu() int {
 	return readInt()
 }
 
-// ============================================================
-// PROGRAM UTAMA
-// ============================================================
-
 func main() {
-	// Perbesar buffer scanner untuk menampung input panjang (visi-misi)
 	scanner.Buffer(make([]byte, 1024*1024), 1024*1024)
 
-	n := 0 // jumlah kandidat aktif saat ini (lokal di main)
+	n := 0 
 	selesai := false
 
-	// Pola repeat-until: ulangi tampil menu hingga pengguna memilih keluar
 	for !selesai {
 		pilihan := tampilMenu()
 		switch pilihan {
