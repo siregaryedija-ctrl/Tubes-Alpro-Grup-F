@@ -443,9 +443,6 @@ func tampilMenu() int {
 }
 
 func main() {
-	//alokasi untuk buffer input sehingga bisa menyimpan data sebesar 1024 x 1024 byte atau 1 MB
-	scanner.Buffer(make([]byte, 1024*1024), 1024*1024)
-
 	// kondisi awal jumlah kandidat
 	n := 0 
 	// untuk mengatur perulangan menu
